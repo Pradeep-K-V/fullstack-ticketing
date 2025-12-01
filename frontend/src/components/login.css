@@ -1,0 +1,127 @@
+/* === Page Layout === */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  padding: 20px;
+}
+
+/* === Login Card === */
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 14px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.login-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+}
+
+.login-subtitle {
+  margin: 4px 0 20px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* === Input Group (floating labels) === */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 12px 14px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+  font-size: 15px;
+  background: transparent;
+  transition: border 0.2s ease;
+}
+
+.login-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.input-label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+/* Move label up when input has content */
+.login-input:focus + .input-label,
+.login-input:not(:placeholder-shown) + .input-label {
+  top: -8px;
+  left: 10px;
+  background: #ffffff;
+  padding: 0 4px;
+  font-size: 12px;
+  color: #2563eb;
+}
+
+/* Prevent flashing when input is empty */
+.login-input::placeholder {
+  color: transparent;
+}
+
+/* === Forgot Password Link === */
+.login-extra {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.forgot-link {
+  font-size: 13px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* === Login Button === */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.login-btn:hover {
+  background: #1e40af;
+  transform: translateY(-2px);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}

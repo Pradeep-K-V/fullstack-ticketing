@@ -1,0 +1,35 @@
+# ====== Node Modules ======
+backend/node_modules/
+frontend/node_modules/
+node_modules/
+
+# ====== Env Files (DO NOT UPLOAD!!) ======
+backend/.env
+frontend/.env
+.env
+.env.*
+
+
+# ====== Build Outputs ======
+frontend/dist/
+backend/dist/
+dist/
+
+# ====== Logs ======
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# ====== System Files ======
+.DS_Store
+Thumbs.db
+
+# ====== Editor Files ======
+.vscode/
+.idea/
+
+# ====== Cache ======
+.cache/
+frontend/.vite/

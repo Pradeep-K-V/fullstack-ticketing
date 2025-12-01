@@ -1,0 +1,138 @@
+/* === Register Page Layout === */
+.register-page {
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+}
+
+/* === Register Card === */
+.register-card {
+  width:100%;
+  max-width:420px;
+  background:#ffffff;
+  padding:32px;
+  border-radius:14px;
+  box-shadow:0 12px 26px rgba(0,0,0,0.18);
+  animation: fadeUp 0.4s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.register-title {
+  margin:0;
+  font-size:26px;
+  font-weight:700;
+  text-align:center;
+  color:#0f172a;
+}
+
+.register-subtitle {
+  text-align:center;
+  margin:4px 0 20px;
+  color:#64748b;
+  font-size:14px;
+}
+
+/* === Floating Input Groups === */
+.input-group {
+  position:relative;
+  margin-bottom:22px;
+}
+
+.reg-input {
+  width:100%;
+  padding:14px 12px;
+  border-radius:10px;
+  border:1px solid #cbd5e1;
+  background:transparent;
+  font-size:15px;
+  outline:none;
+  transition:border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reg-input:focus {
+  border-color:#2563eb;
+  box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* Hide placeholder */
+.reg-input::placeholder { color:transparent; }
+
+/* Floating Label */
+.input-label {
+  position:absolute;
+  top:16px;
+  left:14px;
+  color:#94a3b8;
+  font-size:14px;
+  transition:0.3s ease;
+  pointer-events:none;
+}
+
+/* Float label when typing */
+.reg-input:focus + .input-label,
+.reg-input:not(:placeholder-shown) + .input-label {
+  top:-10px;
+  left:10px;
+  background:white;
+  padding:0 6px;
+  font-size:12px;
+  color:#2563eb;
+}
+
+/* === Select Field === */
+.select-group {
+  margin-bottom:20px;
+}
+
+.select-group label {
+  display:block;
+  margin-bottom:6px;
+  font-weight:600;
+  color:#1e293b;
+}
+
+.styled-select {
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #cbd5e1;
+  background:white;
+  cursor:pointer;
+  font-size:15px;
+  outline:none;
+}
+
+.styled-select:focus {
+  border-color:#2563eb;
+  box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* === Button === */
+.register-btn {
+  width:100%;
+  padding:12px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.25s ease;
+}
+
+.register-btn:hover {
+  background:#1e3a8a;
+  transform:translateY(-2px);
+}
+
+.register-btn:active {
+  transform:translateY(0);
+}

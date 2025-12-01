@@ -3,7 +3,7 @@
 ## Overview
 This repository contains a ready-to-run starter MERN ticketing system:
 - Backend: Node.js, Express, MongoDB, JWT validation via Auth0 JWKS
-- Frontend: React + Vite, Auth0 authentication using @auth0/auth0-react
+- Frontend: React + Vite
 
 ## Structure
 - backend/ : Express API

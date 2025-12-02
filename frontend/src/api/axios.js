@@ -25,10 +25,21 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
+        // Get the current token from localStorage
+        const currentToken = localStorage.getItem('token');
+        if (!currentToken) {
+          throw new Error('No token in localStorage');
+        }
+        
         // Try to refresh the token from the server
         const refreshResponse = await axios.post(
           `${import.meta.env.VITE_API_BASE || 'http://localhost:5000/api'}/auth/refresh`,
-          {}
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${currentToken}`
+            }
+          }
         );
         
         const newToken = refreshResponse.data.token;

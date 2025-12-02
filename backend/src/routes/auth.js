@@ -198,19 +198,18 @@ router.post('/refresh', async (req, res) => {
     const m = auth.match(/^Bearer (.+)$/);
     
     if (!m) {
-      // If no token in header, just issue a new token for guest (optional)
-      // Or reject with 401
       return res.status(401).json({ message: 'No token provided' });
     }
 
     let payload;
     try {
-      // Verify token even if expired - decode it anyway
-      payload = jwt.decode(m[1]);
+      // Decode the token (don't verify expiration, just decode)
+      payload = jwt.decode(m[1], { complete: false });
       if (!payload || !payload.sub) {
         return res.status(401).json({ message: 'Invalid token' });
       }
     } catch (e) {
+      console.error('Token decode error:', e.message);
       return res.status(401).json({ message: 'Invalid token' });
     }
 

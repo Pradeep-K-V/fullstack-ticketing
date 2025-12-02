@@ -9,7 +9,7 @@ export default function CreateTicket() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('Medium');
-  const { getAccessTokenSilently } = useAuth0();
+  //const { getAccessTokenSilently } = useAuth0();
   const nav = useNavigate();
 
   async function submit(e) {
@@ -21,7 +21,6 @@ export default function CreateTicket() {
       alert('Not authenticated. Please login.');
       return;
     }
-
     // Use the api axios instance (it already attaches token from localStorage via interceptor)
     // If you'd like to explicitly pass headers, you may, but prefer using the api instance.
     const res = await api.post('/tickets', { title, description, priority });

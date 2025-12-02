@@ -190,6 +190,51 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
+// POST /auth/refresh - refresh access token
+router.post('/refresh', async (req, res) => {
+  try {
+    // Get the token from Authorization header
+    const auth = req.get('authorization') || '';
+    const m = auth.match(/^Bearer (.+)$/);
+    
+    if (!m) {
+      // If no token in header, just issue a new token for guest (optional)
+      // Or reject with 401
+      return res.status(401).json({ message: 'No token provided' });
+    }
+
+    let payload;
+    try {
+      // Verify token even if expired - decode it anyway
+      payload = jwt.decode(m[1]);
+      if (!payload || !payload.sub) {
+        return res.status(401).json({ message: 'Invalid token' });
+      }
+    } catch (e) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    // Get fresh user data from DB
+    const user = await User.findById(payload.sub);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Issue a new token
+    const newPayload = {
+      sub: String(user._id),
+      email: user.email,
+      role: user.role
+    };
+
+    const newToken = jwt.sign(newPayload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
+
+    return res.json({ token: newToken });
+  } catch (err) {
+    console.error('refresh error', err);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;
 

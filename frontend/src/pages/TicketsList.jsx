@@ -156,7 +156,7 @@ export default function TicketsList() {
           <select className="filter-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} aria-label="Filter by status">
             <option value="All">All statuses</option>
             <option value="Open">Open</option>
-            <option value="InProgress">In-Progress</option>
+            <option value="In-Progress">In-Progress</option>
             <option value="Resolved">Resolved</option>
             <option value="Closed">Closed</option>
           </select>

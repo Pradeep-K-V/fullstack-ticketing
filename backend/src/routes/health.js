@@ -5,6 +5,19 @@ const Ticket = require('../models/Ticket');
 
 router.get('/', (req, res) => res.json({ ok: true }));
 
+// Debug endpoint - check CORS and request info (no auth required)
+router.get('/test-cors', (req, res) => {
+  return res.json({
+    message: 'CORS is working!',
+    origin: req.get('origin'),
+    method: req.method,
+    headers: {
+      'content-type': req.get('content-type'),
+      'authorization': req.get('authorization') ? 'present' : 'missing'
+    }
+  });
+});
+
 // Debug endpoint - check current user and all tickets
 router.get('/debug', jwtAuth, async (req, res) => {
   try {

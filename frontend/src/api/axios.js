@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE || 'http://localhost:5000/api'
+  baseURL: import.meta.env.VITE_API_BASE || 'https://fullstack-ticketing.onrender.com/api'
 });
 
 // attach JWT from localStorage

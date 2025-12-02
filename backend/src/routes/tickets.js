@@ -13,11 +13,15 @@ function isAdmin(req) {
 router.get('/', async (req, res) => {
   try {
     const requester = req.user ? req.user.sub : null;
+    console.log('GET /api/tickets - requester:', requester, 'isAdmin:', isAdmin(req));
+    
     if (isAdmin(req)) {
       const tickets = await Ticket.find().sort({createdAt: -1});
+      console.log('Admin view - found', tickets.length, 'tickets');
       return res.json(tickets);
     } else {
       const tickets = await Ticket.find({ reporter: requester }).sort({createdAt: -1});
+      console.log('User view - found', tickets.length, 'tickets for reporter:', requester);
       return res.json(tickets);
     }
   } catch(err) {

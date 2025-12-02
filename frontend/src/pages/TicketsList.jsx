@@ -46,7 +46,9 @@ export default function TicketsList() {
   async function load() {
     setLoading(true);
     try {
+      console.log('Loading tickets...');
       const res = await api.get('/tickets');
+      console.log('Tickets loaded:', res.data);
       setTickets(res.data || []);
     } catch (err) {
       console.error('Failed to load tickets', err);
@@ -57,6 +59,17 @@ export default function TicketsList() {
   }
 
   useEffect(() => { load(); }, []);
+  
+  // Refresh tickets when component comes into view
+  useEffect(() => {
+    const handleFocus = () => {
+      console.log('Page focused, reloading tickets...');
+      load();
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
 
   // derived filtered list
   const filtered = useMemo(() => {

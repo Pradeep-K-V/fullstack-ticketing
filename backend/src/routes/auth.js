@@ -13,8 +13,10 @@ const JWT_EXPIRES = '8h';
 // backend/src/routes/auth.js  (REGISTER handler part)
 router.post('/register', async (req, res) => {
   try {
+    console.log('[AUTH] POST /register - body:', req.body);
     let { email, password, name, role } = req.body;
     if (!email || !password) {
+      console.warn('[AUTH] Missing email or password');
       return res.status(400).json({ message: 'Email and password required' });
     }
 
@@ -47,11 +49,15 @@ router.post('/register', async (req, res) => {
     }
 
     const existing = await User.findOne({ email });
-    if (existing) return res.status(409).json({ message: 'User already exists' });
+    if (existing) {
+      console.warn('[AUTH] User already exists:', email);
+      return res.status(409).json({ message: 'User already exists' });
+    }
 
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = new User({ email, passwordHash, name, role });
     await newUser.save();
+    console.log('[AUTH] User registered:', email, 'role:', role);
 
     return res.status(201).json({ id: newUser._id, email: newUser.email, role: newUser.role });
   } catch (err) {
@@ -65,19 +71,26 @@ router.post('/register', async (req, res) => {
 // LOGIN
 router.post('/login', async (req, res) => {
   try {
+    console.log('[AUTH] POST /login - body:', req.body);
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      console.warn('[AUTH] Missing email or password');
+      return res.status(400).json({ message: 'Email and password required' });
+    }
 
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
+      console.warn('[AUTH] User not found:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const valid = await bcrypt.compare(password, foundUser.passwordHash);
     if (!valid) {
+      console.warn('[AUTH] Invalid password for:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // 🔥 THIS was your error line — FIXED
     const payload = {
       sub: String(foundUser._id),
       email: foundUser.email,
@@ -85,6 +98,7 @@ router.post('/login', async (req, res) => {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
+    console.log('[AUTH] Login successful for:', email, 'token generated');
 
     return res.json({
       token,

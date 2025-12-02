@@ -11,10 +11,16 @@ const authRoutes = require('./routes/auth');
 const { jwtAuth } = require('./middleware/jwtAuth');
 
 const app = express();
-app.use(cors({
+
+// CORS configuration
+const corsOptions = {
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}));
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;

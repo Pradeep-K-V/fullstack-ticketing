@@ -1,12 +1,19 @@
 import React from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginButton(){
-  const { loginWithRedirect } = useAuth0();
-  return <button onClick={() => loginWithRedirect()}>Log in</button>;
+  const nav = useNavigate();
+  return <button onClick={() => nav('/login')}>Log in</button>;
 }
 
 export function LogoutButton(){
-  const { logout } = useAuth0();
-  return <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Log out</button>;
+  const nav = useNavigate();
+  
+  function handleLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    nav('/login');
+  }
+  
+  return <button onClick={handleLogout}>Log out</button>;
 }

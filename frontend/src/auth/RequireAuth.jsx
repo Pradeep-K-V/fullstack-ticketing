@@ -1,13 +1,11 @@
 import React from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import { Navigate } from 'react-router-dom';
 
 export default function RequireAuth({ children }){
-  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const token = localStorage.getItem('token');
 
-  if (isLoading) return <div>Loading...</div>;
-  if (!isAuthenticated) {
-    loginWithRedirect();
-    return <div>Redirecting to login...</div>;
+  if (!token) {
+    return <Navigate to="/login" />;
   }
   return children;
 }

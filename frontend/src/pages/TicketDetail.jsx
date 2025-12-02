@@ -2,20 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/axios';
-import { useAuth0 } from '@auth0/auth0-react';
 import '../components/ticket-detail.css';   // <-- ADD THIS
 
 export default function TicketDetail() {
   const { id } = useParams();
-  const { getAccessTokenSilently } = useAuth0();
   const [ticket, setTicket] = useState(null);
   const [comment, setComment] = useState('');
 
   async function load() {
-    const token = await getAccessTokenSilently();
-    const res = await api.get(`/tickets/${id}`, { 
-      headers: { Authorization: `Bearer ${token}` } 
-    });
+    const res = await api.get(`/tickets/${id}`);
     setTicket(res.data);
   }
 
@@ -23,11 +18,9 @@ export default function TicketDetail() {
 
   async function postComment(e) {
     e.preventDefault();
-    const token = await getAccessTokenSilently();
     const res = await api.post(
       `/tickets/${id}/comments`, 
-      { text: comment },
-      { headers: { Authorization: `Bearer ${token}` } }
+      { text: comment }
     );
     setTicket(res.data);
     setComment('');

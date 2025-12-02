@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import api from '../api/axios';
 import { Link } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
 import '../components/ticket-list.css'; // adjust path if your css is elsewhere
 
 // Allowed transitions (same logic as backend; keep in sync)
@@ -23,7 +22,6 @@ function useDebounced(value, delay = 300){
 }
 
 export default function TicketsList() {
-  const { getAccessTokenSilently, user: auth0User } = useAuth0();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,19 +31,12 @@ export default function TicketsList() {
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [expanded, setExpanded] = useState({});
 
-  // admin detection: check localStorage (app user) OR Auth0 role claims
+  // admin detection: check localStorage
   function isAdminLocal() {
     try {
       const localUser = JSON.parse(localStorage.getItem('user') || 'null');
       if (localUser && localUser.role === 'admin') return true;
     } catch (e) { /* ignore */ }
-
-    if (auth0User) {
-      // check common places where role may appear
-      if (auth0User.role === 'admin') return true;
-      const rolesClaim = auth0User['https://myapp.example.com/roles'] || auth0User['roles'];
-      if (Array.isArray(rolesClaim) && rolesClaim.includes('admin')) return true;
-    }
     return false;
   }
 
@@ -55,8 +46,7 @@ export default function TicketsList() {
   async function load() {
     setLoading(true);
     try {
-      const token = await getAccessTokenSilently();
-      const res = await api.get('/tickets', { headers: { Authorization: `Bearer ${token}` }});
+      const res = await api.get('/tickets');
       setTickets(res.data || []);
     } catch (err) {
       console.error('Failed to load tickets', err);
@@ -90,8 +80,7 @@ export default function TicketsList() {
   async function deleteTicket(id) {
     if (!confirm('Delete ticket permanently?')) return;
     try {
-      const token = await getAccessTokenSilently();
-      await api.delete(`/tickets/${id}`, { headers: { Authorization: `Bearer ${token}` }});
+      await api.delete(`/tickets/${id}`);
       setTickets(prev => prev.filter(t => t._id !== id));
     } catch (err) {
       console.error('Delete failed', err);
@@ -102,11 +91,8 @@ export default function TicketsList() {
   async function changeStatus(ticket, newStatus) {
     if (!newStatus) return;
     try {
-      const token = await getAccessTokenSilently();
       // use status endpoint which validates transitions (backend)
-      const res = await api.patch(`/tickets/${ticket._id}/status`, { status: newStatus }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.patch(`/tickets/${ticket._id}/status`, { status: newStatus });
       // update local state
       setTickets(prev => prev.map(t => t._id === ticket._id ? res.data : t));
     } catch (err) {
@@ -122,11 +108,8 @@ export default function TicketsList() {
   if (!assignee) return alert('No assignee provided');
 
   try {
-    const token = await getAccessTokenSilently();
     // we send assignee (can be email or id). backend will resolve email->id if needed
-    const res = await api.put(`/tickets/${ticket._id}`, { assignee }, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const res = await api.put(`/tickets/${ticket._id}`, { assignee });
     setTickets(prev => prev.map(t => t._id === ticket._id ? res.data : t));
     alert('Assigned successfully');
   } catch (err) {

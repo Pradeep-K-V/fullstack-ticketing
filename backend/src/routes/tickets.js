@@ -13,15 +13,26 @@ function isAdmin(req) {
 router.get('/', async (req, res) => {
   try {
     const requester = req.user ? req.user.sub : null;
-    console.log('GET /api/tickets - requester:', requester, 'isAdmin:', isAdmin(req));
+    console.log('=== GET /api/tickets ===');
+    console.log('req.user:', req.user);
+    console.log('requester (sub):', requester);
+    console.log('isAdmin:', isAdmin(req));
     
     if (isAdmin(req)) {
       const tickets = await Ticket.find().sort({createdAt: -1});
-      console.log('Admin view - found', tickets.length, 'tickets');
+      console.log('✓ Admin view - found', tickets.length, 'tickets');
+      console.log('Tickets:', tickets);
       return res.json(tickets);
     } else {
+      console.log('🔍 Searching for tickets with reporter:', requester);
       const tickets = await Ticket.find({ reporter: requester }).sort({createdAt: -1});
-      console.log('User view - found', tickets.length, 'tickets for reporter:', requester);
+      console.log('✓ User view - found', tickets.length, 'tickets');
+      
+      // Also log all tickets in the database
+      const allTickets = await Ticket.find().sort({createdAt: -1});
+      console.log('Total tickets in DB:', allTickets.length);
+      allTickets.forEach(t => console.log('  Ticket:', t._id, 'reporter:', t.reporter, 'title:', t.title));
+      
       return res.json(tickets);
     }
   } catch(err) {

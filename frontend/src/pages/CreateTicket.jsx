@@ -12,20 +12,27 @@ export default function CreateTicket() {
   const { getAccessTokenSilently } = useAuth0();
   const nav = useNavigate();
 
-  async function submit(e){
-    e.preventDefault();
-    try {
-      const token = await getAccessTokenSilently();
-      const res = await api.post('/tickets', 
-        { title, description, priority },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      nav('/');
-    } catch (err) {
-      const serverMsg = err?.response?.data?.message || err.message;
-      alert('Create failed: ' + serverMsg);
+  async function submit(e) {
+  e.preventDefault();
+  try {
+    // Use the token that your backend returns on login (saved in localStorage)
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Not authenticated. Please login.');
+      return;
     }
+
+    // Use the api axios instance (it already attaches token from localStorage via interceptor)
+    // If you'd like to explicitly pass headers, you may, but prefer using the api instance.
+    const res = await api.post('/tickets', { title, description, priority });
+    // success: navigate or show message
+    nav('/');
+  } catch (err) {
+    const serverMsg = err?.response?.data?.message || err.message;
+    alert('Create failed: ' + serverMsg);
   }
+}
+
 
   return (
     <div className="create-page">

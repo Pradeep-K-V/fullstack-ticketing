@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
+//import { useAuth0 } from '@auth0/auth0-react';
 import '../components/create-ticket.css';   // <-- ADD THIS LINE
 
 export default function CreateTicket() {

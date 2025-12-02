@@ -12,10 +12,10 @@ const { jwtAuth } = require('./middleware/jwtAuth');
 
 const app = express();
 
-// CORS configuration
+// CORS configuration - allow all origins for testing (can tighten later)
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
+  origin: '*',  // Allow all origins temporarily for mobile testing
+  credentials: false,  // Can't use credentials with '*'
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
